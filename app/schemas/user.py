@@ -1,13 +1,17 @@
-import datetime
-from typing import Optional
+from fastapi_users import models
 
-from fastapi_users import schemas
 
-class UserRead(schemas.BaseUser[int]):
+class User(models.BaseUser):
     pass
 
-class UserCreate(schemas.BaseUserCreate):
+
+class UserCreate(models.BaseUserCreate):
     pass
 
-class UserUpdate(schemas.BaseUserUpdate):
+
+class UserUpdate(models.BaseUserUpdate):
+    pass
+
+
+class UserDB(User, models.BaseUserDB):
     pass

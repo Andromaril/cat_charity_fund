@@ -5,7 +5,6 @@ from pydantic import (BaseModel, Extra, Field, NonNegativeInt,
                       PositiveInt)
 
 
-
 class DonationBase(BaseModel):
 
     full_amount: PositiveInt = Field(
