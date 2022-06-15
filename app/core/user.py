@@ -1,81 +1,66 @@
-from typing import Union
+from typing import Optional, Union
 
-import fastapi as fa
-import fastapi_users as fa_u
-import fastapi_users.authentication as auth
+from fastapi import Depends, Request
+from fastapi_users import (
+    BaseUserManager, FastAPIUsers, IntegerIDMixin, InvalidPasswordException
+)
+from fastapi_users.authentication import (
+    AuthenticationBackend, BearerTransport, JWTStrategy
+)
 from fastapi_users_db_sqlalchemy import SQLAlchemyUserDatabase
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from app.core import config, db
-from app.models import user as models
-from app.schemas import user as schemas
+from app.core.config import settings
+from app.core.db import get_async_session
+from app.models.user import User
+from app.schemas.user import UserCreate
 
+async def get_user_db(session: AsyncSession = Depends(get_async_session)):
+    yield SQLAlchemyUserDatabase(session, User) 
 
-async def get_user_db(
-    session: db.AsyncSession = fa.Depends(db.get_async_session)
-):
-    yield SQLAlchemyUserDatabase(schemas.UserDB, session, models.UserTable)
+bearer_transport = BearerTransport(tokenUrl='auth/jwt/login')
 
+def get_jwt_strategy() -> JWTStrategy:
 
-def get_jwt_strategy() -> auth.JWTStrategy:
+    return JWTStrategy(secret=settings.secret, lifetime_seconds=3600)
 
-    return auth.JWTStrategy(
-        secret=config.settings.secret,
-        lifetime_seconds=3600
-    )
-
-
-bearer_transport = auth.BearerTransport(tokenUrl='auth/jwt/login')
-
-auth_backend = auth.AuthenticationBackend(
+auth_backend = AuthenticationBackend(
     name='jwt',
     transport=bearer_transport,
     get_strategy=get_jwt_strategy,
 )
 
-
-class UserManager(fa_u.BaseUserManager[schemas.UserCreate, schemas.UserDB]):
-
-    user_db_model = schemas.UserDB
-    reset_password_token_secret = config.settings.secret
-    verification_token_secret = config.settings.secret
+class UserManager(IntegerIDMixin, BaseUserManager[User, int]):
 
     async def validate_password(
         self,
         password: str,
-        user: Union[schemas.UserCreate, schemas.UserDB],
+        user: Union[UserCreate, User],
     ) -> None:
-
         if len(password) < 3:
-            raise fa_u.InvalidPasswordException(
-                reason='Password should be at least 8 characters'
+            raise InvalidPasswordException(
+                reason='Password should be at least 3 characters'
             )
         if user.email in password:
-            raise fa_u.InvalidPasswordException(
+            raise InvalidPasswordException(
                 reason='Password should not contain e-mail'
             )
 
     async def on_after_register(
-            self,
-            user: schemas.UserDB,
-            request: Union[None, fa.Request] = None
+            self, user: User, request: Optional[Request] = None
     ):
-
         print(f'Пользователь {user.email} был зарегистрирован')
 
-
-async def get_user_manager(user_db=fa.Depends(get_user_db)):
- 
+async def get_user_manager(user_db=Depends(get_user_db)):
     yield UserManager(user_db)
 
-fastapi_users = fa_u.FastAPIUsers(
-    get_user_manager=get_user_manager,
-    auth_backends=[auth_backend],
-    user_model=schemas.User,
-    user_create_model=schemas.UserCreate,
-    user_update_model=schemas.UserUpdate,
-    user_db_model=schemas.UserDB
+fastapi_users = FastAPIUsers[User, int](
+    get_user_manager,
+    [auth_backend],
 )
 
+
 current_user = fastapi_users.current_user(active=True)
-current_superuser = fastapi_users.current_user(active=True, superuser=True)
+current_superuser = fastapi_users.current_user(active=True, superuser=True) 
+
+        

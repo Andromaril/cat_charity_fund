@@ -6,7 +6,7 @@ from sqlalchemy import and_, asc, select
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.crud.base import CRUDBase
-from app.models.project import Project
+from app.models.charity_project import Project
 
 
 class CRUDProject(CRUDBase):
