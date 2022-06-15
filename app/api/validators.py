@@ -21,7 +21,7 @@ async def check_name_duplicate(
 async def check_project_exists(
         project_id: int,
         session: AsyncSession,
-) -> Project:
+) -> CharityProject:
     project = await project_crud.get(project_id, session)
     if project is None:
         raise HTTPException(
@@ -41,7 +41,7 @@ async def check_project_exists(
 async def check_project_before_edit(
         project_id: int,
         session: AsyncSession, 
-) -> Project:
+) -> CharityProject:
     project = await project_crud.get(
         # Для понятности кода можно передавать аргументы по ключу.
         obj_id=project_id, session=session 

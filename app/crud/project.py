@@ -6,7 +6,7 @@ from sqlalchemy import and_, asc, select
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.crud.base import CRUDBase
-from app.models.charity_project import Project
+from app.models.charity_project import CharityProject
 
 
 class CRUDProject(CRUDBase):
@@ -16,8 +16,8 @@ class CRUDProject(CRUDBase):
              *,
             close_data: datetime,
             session: AsyncSession,
-    ) -> list[Project]:
-        select_stmt = select(Project.close_data).order_by(asc('close_data'))
+    ) -> list[CharityProject]:
+        select_stmt = select(CharityProject.close_data).order_by(asc('close_data'))
         project = await session.execute(select_stmt)
         project = project.scalars().all()
         return project 
@@ -29,12 +29,12 @@ class CRUDProject(CRUDBase):
             session: AsyncSession,
     ) -> Optional[int]:
         db_name_id = await session.execute(
-            select(Project.id).where(
-                Project.name == name
+            select(CharityProject.id).where(
+                CharityProject.name == name
             )
         )
         db_name_id = db_name_id.scalars().first()
         return db_name_id
 
 
-project_crud = CRUDProject(Project)
+project_crud = CRUDProject(CharityProject)

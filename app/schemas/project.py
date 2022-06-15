@@ -14,13 +14,13 @@ class ProjectBase(BaseModel):
         max_length=100
     )
     description: str = Field(
-        None,
+        ...,
         example='На что собираем',
         min_length=1
     )
-    full_amount: Union[None, PositiveInt] = Field(
-        None,
-        example=0
+    full_amount: PositiveInt = Field(
+        ...,
+        example=1
     )
 
 
@@ -34,7 +34,13 @@ class ProjectBase(BaseModel):
     def description_cannot_be_null(cls, value):
         if value is None:
             raise ValueError('Описание проекта не может быть пустым!')
-        return value   
+        return value  
+
+    @validator('full_amount')
+    def full_amount_cannot_be_null(cls, value):
+        if value is None or (value <=0):
+            raise ValueError('Требуемая сумма (full_amount) проекта должна быть целочисленной и больше 0.')
+        return value  
 
     class Config:
         extra = Extra.forbid
@@ -64,10 +70,10 @@ class ProjectResponse(ProjectCreate):
         ...,
         example='2019-08-24T14:15:22Z'
     )
-    close_date: Union[None, datetime] = Field(
-        None,
-        example='2019-08-24T14:15:22Z'
-    )
+    #close_date: Union[None, datetime] = Field(
+        #None,
+        #example='2019-08-24T14:15:22Z'
+    #)
 
     class Config:
         orm_mode = True
