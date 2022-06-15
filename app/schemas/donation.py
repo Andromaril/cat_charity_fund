@@ -1,8 +1,7 @@
 from datetime import datetime
 from typing import Union
 
-from pydantic import (BaseModel, Extra, Field, NonNegativeInt,
-                      PositiveInt)
+from pydantic import BaseModel, Extra, Field, NonNegativeInt, PositiveInt
 
 
 class DonationBase(BaseModel):

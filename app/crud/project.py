@@ -1,9 +1,9 @@
-from typing import Optional
 from datetime import datetime
 from operator import and_
+from typing import Optional
 
+from sqlalchemy import and_, asc, select
 from sqlalchemy.ext.asyncio import AsyncSession
-from sqlalchemy import select, and_, asc
 
 from app.crud.base import CRUDBase
 from app.models.project import Project

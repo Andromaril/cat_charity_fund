@@ -5,7 +5,6 @@ from pydantic import (BaseModel, Extra, Field, NonNegativeInt, PositiveInt,
                       validator)
 
 
-
 class ProjectBase(BaseModel):
 
     name: str = Field(

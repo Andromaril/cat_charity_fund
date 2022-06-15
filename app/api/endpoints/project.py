@@ -3,11 +3,12 @@ from typing import List
 from fastapi import APIRouter, Depends
 from pydantic import PositiveInt
 
-from app.schemas.project import ProjectBase, ProjectCreate, ProjectResponse, ProjectUpdate
 from app.api import validators
 from app.core import db, user
-from app.crud.project import project_crud
 from app.crud.donation import donation_crud
+from app.crud.project import project_crud
+from app.schemas.project import (ProjectBase, ProjectCreate, ProjectResponse,
+                                 ProjectUpdate)
 from app.services import invest
 
 router = APIRouter()
