@@ -1,10 +1,10 @@
 from sqlalchemy import Column, String, Text
 
 from app.core.db import Base
-from app.models.financialbase import FinancialBase
+from app.models.financial_base import FinancialBase
 
 
-class Project(Base, FinancialBase):
+class CharityProject(Base, FinancialBase):
 
     name = Column(String(100), unique=True, nullable=False)
 

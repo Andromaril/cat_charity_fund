@@ -1,7 +1,7 @@
 from sqlalchemy import Column, ForeignKey, Integer, String, Text
 
 from app.core.db import Base
-from app.models.financialbase import FinancialBase
+from app.models.financial_base import FinancialBase
 
 
 class Donation(Base, FinancialBase):
