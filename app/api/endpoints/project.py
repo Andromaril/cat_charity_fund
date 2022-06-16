@@ -8,7 +8,7 @@ from app.core import db, user
 from app.crud.donation import donation_crud
 from app.crud.project import project_crud
 from app.schemas.project import (ProjectCreate, ProjectResponse,
-                                 ProjectUpdate, ProjectResponseDelete)
+                                 ProjectResponseDelete, ProjectUpdate)
 from app.services import invest
 
 router = APIRouter()

@@ -25,11 +25,8 @@ async def func_invest(
         if i.full_amount == i.invested_amount:
             i.fully_invested = True
             i.close_date = datetime.now()
-        #close_obj(i)
     if project.full_amount == project.invested_amount:
         project.fully_invested = True
         project.close_date = datetime.now()
-    #close_obj(project)
     await session.commit()
     await session.refresh(project)
-    return project
