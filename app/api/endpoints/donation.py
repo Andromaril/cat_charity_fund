@@ -8,7 +8,7 @@ from app.core.db import get_async_session
 from app.core.user import current_user
 from app.crud.donation import donation_crud
 from app.crud.project import project_crud
-from app.models.user import User
+from app.models import User
 from app.schemas.donation import (DonationCreate, DonationMyResponse,
                                   DonationResponse)
 from app.services import invest
