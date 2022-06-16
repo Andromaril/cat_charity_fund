@@ -44,7 +44,7 @@ async def create_donation(
         session=session,
         user=user
     )
-    await invest.distribution_of_amounts(
+    await invest.func_invest(
         project=donation,
         false_full=project_crud,
         session=session
@@ -54,14 +54,14 @@ async def create_donation(
 
 
 @router.get(path='/my',
-            response_model=List[DonationMyResponse], 
+            response_model=List[DonationMyResponse],
             response_model_exclude={'user_id'},
-)
+            )
 async def get_my_donation(
         session: AsyncSession = Depends(get_async_session),
         user: User = Depends(current_user)
-):
+) -> List[DonationMyResponse]:
     reservations = await donation_crud.get_by_user(
         session=session, user=user
     )
-    return reservations 
+    return reservations

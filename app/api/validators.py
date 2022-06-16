@@ -2,9 +2,7 @@ from fastapi import HTTPException
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.schemas.project import ProjectUpdate
-from app.crud.donation import donation_crud
 from app.crud.project import project_crud
-from app.models.donation import Donation
 from app.models.charity_project import CharityProject
 
 
@@ -18,6 +16,7 @@ async def check_name_duplicate(
             status_code=400,
             detail='Проект с таким именем уже существует!',
         )
+
 
 async def check_project_exists(
         project_id: int,
@@ -36,23 +35,22 @@ async def check_project_exists(
             detail='В проект были внесены средства, не подлежит удалению!'
         )
 
-    return project 
+    return project
 
 
 async def check_project_before_edit(
         project_id: int,
-        session: AsyncSession, 
+        session: AsyncSession,
         obj_in: ProjectUpdate
 ) -> CharityProject:
     project = await project_crud.get(
-        # Для понятности кода можно передавать аргументы по ключу.
-        obj_id=project_id, session=session 
+        obj_id=project_id, session=session
     )
     if obj_in.name is not None:
         if obj_in.name == project.name:
             raise HTTPException(status_code=400, detail='При редактировании проекта его новое имя должно быть уникальным.')
         await check_name_duplicate(name=obj_in.name, session=session)
-        
+
     if not project:
         raise HTTPException(status_code=404, detail='Проект не найден!')
     if project.fully_invested is True:

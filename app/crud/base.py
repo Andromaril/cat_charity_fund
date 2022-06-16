@@ -15,7 +15,7 @@ class CRUDBase:
         self.model = model
 
     async def get(
-            self, 
+            self,
             obj_id: int,
             session: AsyncSession,
     ):
@@ -27,33 +27,18 @@ class CRUDBase:
         return db_obj.scalars().first()
 
     async def get_multi(
-            self, 
+            self,
             session: AsyncSession
     ):
         db_objs = await session.execute(select(self.model))
         return db_objs.scalars().all()
-
-
-    
-
-    #async def create(
-            #self, 
-            #obj_in,
-            #session: AsyncSession,
-    #):
-        #obj_in_data = obj_in.dict()
-        #db_obj = self.model(**obj_in_data)
-        #session.add(db_obj)
-        #await session.commit()
-        #await session.refresh(db_obj)
-        #return db_obj
 
     async def update(
             self,
             db_obj: CharityProject,
             obj_in: ProjectUpdate,
             session: AsyncSession,
-    )-> CharityProject:
+    ) -> CharityProject:
         obj_data = jsonable_encoder(db_obj)
         update_data = obj_in.dict(exclude_unset=True)
 
@@ -72,8 +57,7 @@ class CRUDBase:
     ):
         await session.delete(db_obj)
         await session.commit()
-        return db_obj 
-
+        return db_obj
 
     async def create(
             self,
@@ -89,7 +73,6 @@ class CRUDBase:
         await session.commit()
         await session.refresh(db_obj)
         return db_obj
-
 
     async def invested_false(
         self,

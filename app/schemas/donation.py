@@ -9,7 +9,7 @@ class DonationBase(BaseModel):
         ...,
         example=200
     )
-    comment: Optional[str]= Field(
+    comment: Optional[str] = Field(
         None,
         example='Помощь'
     )
@@ -48,7 +48,3 @@ class DonationResponse(DonationMyResponse):
         ...,
         example=True
     )
-    #close_date: Optional[datetime] = Field(
-        #None,
-        #example='2019-08-24T14:15:22Z'
-    #)

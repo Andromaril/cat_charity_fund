@@ -1,4 +1,4 @@
-from sqlalchemy import Column, ForeignKey, Integer, String, Text
+from sqlalchemy import Column, ForeignKey, Integer, Text
 
 from app.core.db import Base
 from app.models.financial_base import FinancialBase

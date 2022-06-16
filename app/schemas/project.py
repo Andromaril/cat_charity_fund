@@ -1,8 +1,7 @@
 from datetime import datetime
-from typing import Union, Optional
+from typing import Optional
 
-from pydantic import (BaseModel, Extra, Field, NonNegativeInt, PositiveInt,
-                      validator)
+from pydantic import (BaseModel, Extra, Field, NonNegativeInt, PositiveInt)
 
 
 class ProjectBase(BaseModel):
@@ -43,12 +42,10 @@ class ProjectResponse(ProjectBase):
         ...,
         example='2019-08-24T14:15:22Z'
     )
-    #close_date: Optional[datetime] = Field(
-        #None,
-        #example='2019-08-24T14:15:22Z'
-    #)
+
     class Config:
         orm_mode = True
+
 
 class ProjectResponseDelete(ProjectResponse):
 
@@ -56,26 +53,3 @@ class ProjectResponseDelete(ProjectResponse):
         None,
         example='2019-08-24T14:15:22Z'
     )
-
-
-#class ProjectResponseUpdate(ProjectBase):
-
-    #id: int
-    #invested_amount: Optional[NonNegativeInt] = Field(
-        #...,
-        #example=1
-    #)
-    #fully_invested: Optional[bool] = Field(
-        #...,
-        #example=True
-    #)
-    #create_date: Optional[datetime] = Field(
-        #...,
-        #example='2019-08-24T14:15:22Z'
-    #)
-    #close_date: Union[None, datetime] = Field(
-        #None,
-        #example='2019-08-24T14:15:22Z'
-    #)
-    #class Config:
-       #orm_mode = True

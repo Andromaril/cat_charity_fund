@@ -7,7 +7,7 @@ from app.api import validators
 from app.core import db, user
 from app.crud.donation import donation_crud
 from app.crud.project import project_crud
-from app.schemas.project import (ProjectBase, ProjectCreate, ProjectResponse,
+from app.schemas.project import (ProjectCreate, ProjectResponse,
                                  ProjectUpdate, ProjectResponseDelete)
 from app.services import invest
 
@@ -45,7 +45,7 @@ async def create_charity_project(
         obj_in=new_project,
         session=session
     )
-    await invest.distribution_of_amounts(
+    await invest.func_invest(
         project=project,
         false_full=donation_crud,
         session=session
@@ -66,18 +66,13 @@ async def update_charity_project(
     session: db.AsyncSession = Depends(db.get_async_session)
 ) -> ProjectResponseDelete:
 
-    project= await validators.check_project_before_edit(
+    project = await validators.check_project_before_edit(
         project_id=project_id, session=session, obj_in=obj_in
     )
 
     project = await project_crud.update(
         db_obj=project, obj_in=obj_in, session=session
     )
-    #await invest.distribution_of_amounts(
-        #project=project,
-        #false_full=donation_crud,
-        #session=session
-    #)
     return project
 
 
