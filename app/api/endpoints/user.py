@@ -19,7 +19,8 @@ router.include_router(
     fastapi_users.get_users_router(UserRead, UserUpdate),
     prefix='/users',
     tags=['users'],
-) 
+)
+
 
 @router.delete(
     '/users/{id}',
@@ -31,4 +32,4 @@ def delete_user(id: str):
     raise HTTPException(
         status_code=405,
         detail="Удаление пользователей запрещено!"
-    ) 
+    )
