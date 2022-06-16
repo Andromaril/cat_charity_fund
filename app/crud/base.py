@@ -1,7 +1,7 @@
 from typing import Optional
 
 from fastapi.encoders import jsonable_encoder
-from sqlalchemy import select
+from sqlalchemy import select, asc
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.models.user import User
@@ -96,12 +96,14 @@ class CRUDBase:
         session: AsyncSession
     ):
 
-        invested = await session.execute(
+        invested = await session.scalars(
             select(
                 self.model
             ).where(
                 self.model.fully_invested.is_(False)
+            ).order_by(
+                asc('create_date')
             )
         )
-        invested = invested.scalars().all()
+        invested = invested.all()
         return invested

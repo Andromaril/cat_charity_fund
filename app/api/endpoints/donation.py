@@ -45,8 +45,8 @@ async def create_donation(
         user=user
     )
     await invest.distribution_of_amounts(
-        undivided=donation,
-        crud_class=project_crud,
+        project=donation,
+        false_full=project_crud,
         session=session
     )
 

@@ -8,4 +8,4 @@ class Donation(Base, FinancialBase):
 
     user_id = Column(Integer, ForeignKey('user.id'))
 
-    comment = Column(Text, nullable=False)
+    comment = Column(Text, nullable=True)

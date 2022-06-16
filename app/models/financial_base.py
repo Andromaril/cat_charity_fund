@@ -2,7 +2,6 @@ from datetime import datetime
 
 from sqlalchemy import Boolean, Column, DateTime, Integer
 
-
 class FinancialBase:
 
     __abstract__ = True

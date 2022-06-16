@@ -33,7 +33,7 @@ async def check_project_exists(
     if project.invested_amount > 0:
         raise HTTPException(
             status_code=400,
-            detail='В данный проект уже были сделаны инвестиции!'
+            detail='В проект были внесены средства, не подлежит удалению!'
         )
 
     return project 

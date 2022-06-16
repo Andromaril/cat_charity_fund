@@ -28,14 +28,14 @@ async def get_all_projects(
 
 @router.post(
     path='/',
-    response_model=ProjectResponse,
+    response_model=ProjectResponseDelete,
     response_model_exclude_none=True,
     dependencies=[Depends(user.current_superuser)]
 )
 async def create_charity_project(
     new_project: ProjectCreate,
     session: db.AsyncSession = Depends(db.get_async_session)
-) -> ProjectResponse:
+) -> ProjectResponseDelete:
 
     await validators.check_name_duplicate(
         name=new_project.name,
@@ -46,8 +46,8 @@ async def create_charity_project(
         session=session
     )
     await invest.distribution_of_amounts(
-        undivided=project,
-        crud_class=donation_crud,
+        project=project,
+        false_full=donation_crud,
         session=session
     )
 
@@ -73,11 +73,11 @@ async def update_charity_project(
     project = await project_crud.update(
         db_obj=project, obj_in=obj_in, session=session
     )
-    await invest.distribution_of_amounts(
-        undivided=project,
-        crud_class=donation_crud,
-        session=session
-    )
+    #await invest.distribution_of_amounts(
+        #project=project,
+        #false_full=donation_crud,
+        #session=session
+    #)
     return project
 
 

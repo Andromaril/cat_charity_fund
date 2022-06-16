@@ -1,6 +1,5 @@
 from datetime import datetime
-from typing import Union
-
+from typing import Optional
 from pydantic import BaseModel, Extra, Field, NonNegativeInt, PositiveInt
 
 
@@ -10,8 +9,8 @@ class DonationBase(BaseModel):
         ...,
         example=200
     )
-    comment: str = Field(
-        ...,
+    comment: Optional[str]= Field(
+        None,
         example='Помощь'
     )
 
@@ -25,7 +24,10 @@ class DonationCreate(DonationBase):
 
 class DonationMyResponse(DonationBase):
 
-    id: int
+    id: PositiveInt = Field(
+        ...,
+        example=1
+    )
     create_date: datetime = Field(
         ...,
         example='2019-08-24T14:15:22Z'
@@ -46,7 +48,7 @@ class DonationResponse(DonationMyResponse):
         ...,
         example=True
     )
-    close_date: Union[None, datetime] = Field(
-        None,
-        example='2019-08-24T14:15:22Z'
-    )
+    #close_date: Optional[datetime] = Field(
+        #None,
+        #example='2019-08-24T14:15:22Z'
+    #)
