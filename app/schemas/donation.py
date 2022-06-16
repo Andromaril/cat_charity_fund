@@ -10,8 +10,8 @@ class DonationBase(BaseModel):
         ...,
         example=200
     )
-    comment: Union[None, str] = Field(
-        None,
+    comment: str = Field(
+        ...,
         example='Помощь'
     )
 

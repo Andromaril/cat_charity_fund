@@ -1,79 +1,81 @@
 from datetime import datetime
-from typing import Union
+from typing import Union, Optional
 
 from pydantic import (BaseModel, Extra, Field, NonNegativeInt, PositiveInt,
                       validator)
 
 
 class ProjectBase(BaseModel):
+    name: Optional[str] = Field(None, example='Проект', min_length=1, max_length=100)
+    description: Optional[str] = Field(None, example='На что собираем', min_length=1)
+    full_amount: Optional[PositiveInt] = Field(
+        None,
+        example=1)
 
-    name: str = Field(
-        ...,
-        example='Проект',
-        min_length=1,
-        max_length=100
-    )
-    description: str = Field(
-        ...,
-        example='На что собираем',
-        min_length=1
-    )
+    class Config:
+        extra = Extra.forbid
+
+
+class ProjectCreate(BaseModel):
+    name: str = Field(..., example='Проект', min_length=1, max_length=100)
+    description: str = Field(..., example='На что собираем', min_length=1)
     full_amount: PositiveInt = Field(
         ...,
         example=1
     )
 
 
-    @validator('name')
-    def name_cannot_be_null(cls, value):
-        if value is None:
-            raise ValueError('Имя проекта не может быть пустым!')
-        return value    
-    
-    @validator('description')
-    def description_cannot_be_null(cls, value):
-        if value is None:
-            raise ValueError('Описание проекта не может быть пустым!')
-        return value  
-
-    @validator('full_amount')
-    def full_amount_cannot_be_null(cls, value):
-        if value is None or (value <=0):
-            raise ValueError('Требуемая сумма (full_amount) проекта должна быть целочисленной и больше 0.')
-        return value  
-
-    class Config:
-        extra = Extra.forbid
-
-
-class ProjectCreate(ProjectBase):
-    
-    pass
-
 class ProjectUpdate(ProjectBase):
-
     pass
 
 
-class ProjectResponse(ProjectCreate):
-
+class ProjectResponse(ProjectBase):
     id: int
-    invested_amount: NonNegativeInt = Field(
+    invested_amount: Optional[NonNegativeInt] = Field(
         ...,
         example=1
     )
-    fully_invested: bool = Field(
+    fully_invested: Optional[bool] = Field(
         ...,
         example=True
     )
-    create_date: datetime = Field(
+    create_date: Optional[datetime] = Field(
         ...,
         example='2019-08-24T14:15:22Z'
     )
+    #close_date: Optional[datetime] = Field(
+        #None,
+        #example='2019-08-24T14:15:22Z'
+    #)
+    class Config:
+        orm_mode = True
+
+class ProjectResponseDelete(ProjectResponse):
+
+    close_date: Optional[datetime] = Field(
+        None,
+        example='2019-08-24T14:15:22Z'
+    )
+
+
+#class ProjectResponseUpdate(ProjectBase):
+
+    #id: int
+    #invested_amount: Optional[NonNegativeInt] = Field(
+        #...,
+        #example=1
+    #)
+    #fully_invested: Optional[bool] = Field(
+        #...,
+        #example=True
+    #)
+    #create_date: Optional[datetime] = Field(
+        #...,
+        #example='2019-08-24T14:15:22Z'
+    #)
     #close_date: Union[None, datetime] = Field(
         #None,
         #example='2019-08-24T14:15:22Z'
     #)
-
-    class Config:
-        orm_mode = True
+    #class Config:
+       #orm_mode = True

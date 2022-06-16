@@ -5,6 +5,8 @@ from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.models.user import User
+from app.models.charity_project import CharityProject
+from app.schemas.project import ProjectUpdate
 
 
 class CRUDBase:
@@ -48,10 +50,10 @@ class CRUDBase:
 
     async def update(
             self,
-            db_obj,
-            obj_in,
+            db_obj: CharityProject,
+            obj_in: ProjectUpdate,
             session: AsyncSession,
-    ):
+    )-> CharityProject:
         obj_data = jsonable_encoder(db_obj)
         update_data = obj_in.dict(exclude_unset=True)
 

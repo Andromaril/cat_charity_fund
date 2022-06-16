@@ -8,7 +8,7 @@ from app.core import db, user
 from app.crud.donation import donation_crud
 from app.crud.project import project_crud
 from app.schemas.project import (ProjectBase, ProjectCreate, ProjectResponse,
-                                 ProjectUpdate)
+                                 ProjectUpdate, ProjectResponseDelete)
 from app.services import invest
 
 router = APIRouter()
@@ -56,22 +56,22 @@ async def create_charity_project(
 
 @router.patch(
     path='/{project_id}',
-    response_model=ProjectResponse,
-    response_model_exclude_none=True,
+    response_model=ProjectResponseDelete,
+    response_model_exclude_none=False,
     dependencies=[Depends(user.current_superuser)]
 )
 async def update_charity_project(
     project_id: PositiveInt,
     obj_in: ProjectUpdate,
     session: db.AsyncSession = Depends(db.get_async_session)
-) -> ProjectResponse:
+) -> ProjectResponseDelete:
 
-    project = await validators.check_project_before_edit(
-        project_id, session
+    project= await validators.check_project_before_edit(
+        project_id=project_id, session=session, obj_in=obj_in
     )
 
     project = await project_crud.update(
-        project_id, obj_in, session
+        db_obj=project, obj_in=obj_in, session=session
     )
     await invest.distribution_of_amounts(
         undivided=project,
@@ -83,13 +83,14 @@ async def update_charity_project(
 
 @router.delete(
     path='/{project_id}',
-    response_model=ProjectResponse,
+    response_model=ProjectResponseDelete,
+    response_model_exclude_none=False,
     dependencies=[Depends(user.current_superuser)]
 )
 async def delete_charity_project(
     project_id: PositiveInt,
     session: db.AsyncSession = Depends(db.get_async_session)
-) -> ProjectResponse:
+) -> ProjectResponseDelete:
 
     project = await validators.check_project_exists(
         project_id=project_id,

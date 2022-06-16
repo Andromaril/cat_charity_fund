@@ -1,3 +1,5 @@
 {
-    "python.defaultInterpreterPath": "/cat_charity_fund/venv/bin/python.exe"
+    "python.defaultInterpreterPath": "/cat_charity_fund/venv/bin/python.exe",
+    "python.linting.flake8Enabled": true,
+    "python.linting.enabled": true
 }
