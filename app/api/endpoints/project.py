@@ -45,9 +45,9 @@ async def create_charity_project(
         obj_in=new_project,
         session=session
     )
-    await invest.func_invest(
+    await invest.func_invest1(
         project=project,
-        false_full=donation_crud,
+        #false_full=donation_crud,
         session=session
     )
 

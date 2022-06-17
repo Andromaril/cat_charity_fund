@@ -3,9 +3,9 @@ from typing import List
 from fastapi import APIRouter, Depends
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from app.core import db, user
+from app.core import db
 from app.core.db import get_async_session
-from app.core.user import current_user
+from app.core.user import current_user, current_superuser
 from app.crud.donation import donation_crud
 from app.crud.project import project_crud
 from app.models import User
@@ -19,7 +19,7 @@ router = APIRouter()
 @router.get(
     path='/',
     response_model=List[DonationResponse],
-    dependencies=[Depends(user.current_superuser)]
+    dependencies=[Depends(current_superuser)]
 )
 async def get_all_donations(
     session: db.AsyncSession = Depends(db.get_async_session)
@@ -44,9 +44,9 @@ async def create_donation(
         session=session,
         user=user
     )
-    await invest.func_invest(
+    await invest.func_invest2(
         project=donation,
-        false_full=project_crud,
+        #false_full=project_crud,
         session=session
     )
 
