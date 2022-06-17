@@ -4,4 +4,5 @@ from app.core.db import Base
 
 
 class User(SQLAlchemyBaseUserTable, Base):
+    """Базовая модель пользователя FlaskApi"""
     pass

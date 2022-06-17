@@ -14,13 +14,13 @@ class CRUDProject(CRUDBase):
             name: str,
             session: AsyncSession,
     ) -> Optional[int]:
-        db_name_id = await session.execute(
+        db_project = await session.execute(
             select(CharityProject.id).where(
                 CharityProject.name == name
             )
         )
-        db_name_id = db_name_id.scalars().first()
-        return db_name_id
+        db_project = db_project.scalars().first()
+        return db_project
 
 
 project_crud = CRUDProject(CharityProject)

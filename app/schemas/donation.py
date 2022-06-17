@@ -23,7 +23,7 @@ class DonationCreate(DonationBase):
     pass
 
 
-class DonationMyResponse(DonationBase):
+class DonationResponseMyDonation(DonationBase):
 
     id: PositiveInt = Field(
         ...,
@@ -38,7 +38,7 @@ class DonationMyResponse(DonationBase):
         orm_mode = True
 
 
-class DonationResponse(DonationMyResponse):
+class DonationResponse(DonationResponseMyDonation):
 
     user_id: int
     invested_amount: NonNegativeInt = Field(

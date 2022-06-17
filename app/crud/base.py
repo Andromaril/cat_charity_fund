@@ -1,7 +1,7 @@
 from typing import Optional
 
 from fastapi.encoders import jsonable_encoder
-from sqlalchemy import asc, select
+from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.models import User, CharityProject
@@ -72,20 +72,3 @@ class CRUDBase:
         await session.commit()
         await session.refresh(db_obj)
         return db_obj
-
-    async def invested_false(
-        self,
-        session: AsyncSession
-    ):
-
-        invested = await session.scalars(
-            select(
-                self.model
-            ).where(
-                self.model.fully_invested.is_(False)
-            ).order_by(
-                asc('create_date')
-            )
-        )
-        invested = invested.all()
-        return invested

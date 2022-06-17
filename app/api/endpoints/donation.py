@@ -7,10 +7,9 @@ from app.core import db
 from app.core.db import get_async_session
 from app.core.user import current_user, current_superuser
 from app.crud.donation import donation_crud
-from app.crud.project import project_crud
 from app.models import User
-from app.schemas.donation import (DonationCreate, DonationMyResponse,
-                                  DonationResponse)
+from app.schemas.donation import (DonationCreate,
+                                  DonationResponse, DonationResponseMyDonation)
 from app.services import invest
 
 router = APIRouter()
@@ -30,23 +29,22 @@ async def get_all_donations(
 
 @router.post(
     path='/',
-    response_model=DonationMyResponse,
+    response_model=DonationResponseMyDonation,
     response_model_exclude_none=True
 )
 async def create_donation(
     new_donation: DonationCreate,
     session: db.AsyncSession = Depends(db.get_async_session),
     user: User = Depends(current_user),
-) -> DonationMyResponse:
+) -> DonationResponseMyDonation:
 
     donation = await donation_crud.create(
         obj_in=new_donation,
         session=session,
         user=user
     )
-    await invest.func_invest2(
+    await invest.func_invest_donation(
         project=donation,
-        #false_full=project_crud,
         session=session
     )
 
@@ -54,13 +52,13 @@ async def create_donation(
 
 
 @router.get(path='/my',
-            response_model=List[DonationMyResponse],
+            response_model=List[DonationResponseMyDonation],
             response_model_exclude={'user_id'},
             )
 async def get_my_donation(
         session: AsyncSession = Depends(get_async_session),
         user: User = Depends(current_user)
-) -> List[DonationMyResponse]:
+) -> List[DonationResponseMyDonation]:
     reservations = await donation_crud.get_by_user(
         session=session, user=user
     )
