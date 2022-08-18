@@ -7,7 +7,7 @@
 Клонировать репозиторий и перейти в него в командной строке:
 
 ```
-git clone 
+git clone https://github.com/Andromaril/cat_charity_fund.git
 ```
 
 ```
@@ -55,15 +55,17 @@ pip install -r requirements.txt
 
 
 Создать файл .env с настройками проекта
-    ```
-    APP_TITLE=
-    DATABASE_URL=
-    SECRET=
-    ```
+   
+```
+APP_TITLE=
+DATABASE_URL= 
+SECRET=
+```
+
 ```
 alembic upgrade head
 ```
-    Запустить приложение
+Запустить приложение
 ```
 uvicorn app.main:app
 ```
